@@ -1,12 +1,12 @@
-package org.wesdom.querybuilder.impl;
+package org.dpoeqb.querybuilder.impl;
 
 
+import org.dpoeqb.querybuilder.dtos.OperationDto;
+import org.dpoeqb.querybuilder.dtos.SortPropertyDto;
+import org.dpoeqb.querybuilder.interfaces.IOperationSolver;
 import org.springframework.data.jpa.domain.Specification;
-import org.wesdom.querybuilder.dtos.OperationDto;
-import org.wesdom.querybuilder.dtos.OperationResultDto;
-import org.wesdom.querybuilder.dtos.QueryConstantsEnum;
-import org.wesdom.querybuilder.dtos.SortPropertyDto;
-import org.wesdom.querybuilder.interfaces.IOperationSolver;
+import org.dpoeqb.querybuilder.dtos.OperationResultDto;
+import org.dpoeqb.querybuilder.dtos.QueryConstantsEnum;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;

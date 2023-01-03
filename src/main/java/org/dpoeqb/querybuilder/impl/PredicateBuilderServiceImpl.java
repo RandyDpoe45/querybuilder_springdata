@@ -1,11 +1,11 @@
-package org.wesdom.querybuilder.impl;
+package org.dpoeqb.querybuilder.impl;
 
 
+import org.dpoeqb.querybuilder.dtos.QueryDtoPart;
+import org.dpoeqb.querybuilder.interfaces.IPredicateBuilder;
 import org.springframework.data.jpa.domain.Specification;
-import org.wesdom.querybuilder.dtos.QueryConstantsEnum;
-import org.wesdom.querybuilder.dtos.QueryDto;
-import org.wesdom.querybuilder.dtos.QueryDtoPart;
-import org.wesdom.querybuilder.interfaces.IPredicateBuilder;
+import org.dpoeqb.querybuilder.dtos.QueryConstantsEnum;
+import org.dpoeqb.querybuilder.dtos.QueryDto;
 
 import javax.persistence.criteria.*;
 import java.math.BigDecimal;
@@ -15,7 +15,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**

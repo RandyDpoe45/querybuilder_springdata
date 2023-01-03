@@ -1,8 +1,8 @@
-package org.wesdom.querybuilder.interfaces;
+package org.dpoeqb.querybuilder.interfaces;
 
+import org.dpoeqb.querybuilder.dtos.OperationDto;
 import org.springframework.data.jpa.domain.Specification;
-import org.wesdom.querybuilder.dtos.OperationDto;
-import org.wesdom.querybuilder.dtos.OperationResultDto;
+import org.dpoeqb.querybuilder.dtos.OperationResultDto;
 
 import java.util.List;
 

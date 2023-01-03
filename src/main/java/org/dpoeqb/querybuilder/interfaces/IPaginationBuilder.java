@@ -3,10 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.wesdom.querybuilder.interfaces;
+package org.dpoeqb.querybuilder.interfaces;
 
 import org.springframework.data.domain.Pageable;
-import org.wesdom.querybuilder.dtos.PaginationDto;
+import org.dpoeqb.querybuilder.dtos.PaginationDto;
 
 /**
  *

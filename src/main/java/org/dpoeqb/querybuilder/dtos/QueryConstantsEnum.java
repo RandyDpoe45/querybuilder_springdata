@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.wesdom.querybuilder.dtos;
+package org.dpoeqb.querybuilder.dtos;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

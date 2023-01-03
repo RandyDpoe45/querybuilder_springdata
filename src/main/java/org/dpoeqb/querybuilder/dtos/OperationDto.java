@@ -1,4 +1,4 @@
-package org.wesdom.querybuilder.dtos;
+package org.dpoeqb.querybuilder.dtos;
 
 import lombok.Getter;
 import lombok.Setter;
