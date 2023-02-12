@@ -37,7 +37,6 @@ public class PredicateBuilderServiceImpl<T> implements IPredicateBuilder<T> {
 
     @Override
     public Specification<T> createPredicate(QueryDto queryDto) {
-        boolean index = false;
         if (queryDto == null)
             return null;
         Specification<T> specifications = queryDto.isDistinct() ? Specification.where((root, query, builder) -> {
@@ -49,7 +48,6 @@ public class PredicateBuilderServiceImpl<T> implements IPredicateBuilder<T> {
                 specifications = specifications.and(createSpecification(part));
             } else {
                 specifications = Specification.where(createSpecification(part));
-                index = true;
             }
         }
 
@@ -60,57 +58,79 @@ public class PredicateBuilderServiceImpl<T> implements IPredicateBuilder<T> {
      * Specification builder.
      */
     private Specification<T> createSpecification(QueryDtoPart queryDtoPart) {
-        if (queryDtoPart.getOperator().equals(QueryConstantsEnum.CONDITION_EQUAL.getValue())) {
+        if (queryDtoPart.getOperator().equals(QueryConstantsEnum.CONDITION_IS_NULL.getValue())) {
+            return ((root, query, criteriaBuilder) -> {
+                Expression<T> path = buildPath(root, queryDtoPart.getAttribute());
+                return criteriaBuilder.isNull(path);
+            });
+        } else if (queryDtoPart.getOperator().equals(QueryConstantsEnum.CONDITION_EQUAL_CONTAINS.getValue())) {
             return (root, query, builder) -> {
                 Expression<T> path = buildPath(root, queryDtoPart.getAttribute());
                 Predicate p;
-                if(path.getJavaType().equals(LocalDateTime.class)){
-                    if(queryDtoPart.isMultipleValues())
-                        p = path.as(LocalDateTime.class).in((List<LocalDateTime>) processValue(path,queryDtoPart,true));
+                if (queryDtoPart.isMultipleValues())
+                    p = path.as((String.class)).in(processValue(path, queryDtoPart, true));
+                else
+                    p = builder.like(
+                            path.as((String.class)),
+                            "%" + processValue(path, queryDtoPart, true) + "%"
+                    );
+
+                if (queryDtoPart.isNegate())
+                    return builder.not(p);
+                return p;
+            };
+
+        } else if (queryDtoPart.getOperator().equals(QueryConstantsEnum.CONDITION_EQUAL.getValue())) {
+            return (root, query, builder) -> {
+                Expression<T> path = buildPath(root, queryDtoPart.getAttribute());
+                Predicate p;
+                if (path.getJavaType().equals(LocalDateTime.class)) {
+                    if (queryDtoPart.isMultipleValues())
+                        p = path.as(LocalDateTime.class).in((List<LocalDateTime>) processValue(path, queryDtoPart, true));
                     else
                         p = builder.equal(
-                          path.as(LocalDateTime.class),
-                          processValue(path,queryDtoPart,true)
+                                path.as(LocalDateTime.class),
+                                processValue(path, queryDtoPart, true)
                         );
-                }else if (path.getJavaType().equals(LocalDate.class)) {
+                } else if (path.getJavaType().equals(LocalDate.class)) {
                     if (queryDtoPart.isMultipleValues())
-                        p = path.as((LocalDate.class)).in((List<LocalDate>) processValue(path, queryDtoPart,true));
+                        p = path.as((LocalDate.class)).in((List<LocalDate>) processValue(path, queryDtoPart, true));
                     else
                         p = builder.equal(
                                 path.as((LocalDate.class)),
-                                processValue(path, queryDtoPart,true)
+                                processValue(path, queryDtoPart, true)
                         );
                 } else if (path.getJavaType().equals(LocalTime.class)) {
                     if (queryDtoPart.isMultipleValues())
-                        p = path.as((LocalTime.class)).in((List<LocalTime>) processValue(path, queryDtoPart,true));
+                        p = path.as((LocalTime.class)).in((List<LocalTime>) processValue(path, queryDtoPart, true));
                     else
                         p = builder.equal(
                                 path.as((LocalTime.class)),
-                                processValue(path, queryDtoPart,true)
+                                processValue(path, queryDtoPart, true)
                         );
                 } else if (path.getJavaType().equals(Boolean.class)) {
                     if (queryDtoPart.isMultipleValues())
-                        p = path.as((Boolean.class)).in((List<Boolean>) processValue(path, queryDtoPart,true));
+                        p = path.as((Boolean.class)).in((List<Boolean>) processValue(path, queryDtoPart, true));
                     else
                         p = builder.equal(
                                 path.as((Boolean.class)),
-                                processValue(path, queryDtoPart,true)
+                                processValue(path, queryDtoPart, true)
                         );
                 } else if (path.getJavaType().equals(String.class)) {
                     if (queryDtoPart.isMultipleValues())
-                        p = path.as((String.class)).in(processValue(path, queryDtoPart,true));
+                        p = path.as((String.class)).in(processValue(path, queryDtoPart, true));
                     else
                         p = builder.like(
                                 path.as((String.class)),
-                                "%" + processValue(path, queryDtoPart,true) + "%"
+                                ""+processValue(path, queryDtoPart, true)
                         );
                 } else {
                     if (queryDtoPart.isMultipleValues())
-                        p = path.as(BigDecimal.class).in((List<BigDecimal>) processValue(path, queryDtoPart,true));
+                        p = path.as(BigDecimal.class).in((List<BigDecimal>) processValue(path, queryDtoPart, true));
                     else
                         p = builder.equal(
                                 path.as((BigDecimal.class)),
-                                processValue(path, queryDtoPart,true)
+                                processValue(path, queryDtoPart, true)
                         );
                 }
                 if (queryDtoPart.isNegate())
@@ -121,23 +141,23 @@ public class PredicateBuilderServiceImpl<T> implements IPredicateBuilder<T> {
             return (root, query, builder) -> {
                 Expression<T> path = buildPath(root, queryDtoPart.getAttribute());
                 Predicate p;
-                if(path.getJavaType().equals(LocalDateTime.class)){
+                if (path.getJavaType().equals(LocalDateTime.class)) {
                     p = builder.between(
                             path.as((LocalDateTime.class)),
-                            (LocalDateTime) processValue(path,queryDtoPart,true),
-                            (LocalDateTime) processValue(path,queryDtoPart,false)
+                            (LocalDateTime) processValue(path, queryDtoPart, true),
+                            (LocalDateTime) processValue(path, queryDtoPart, false)
                     );
-                }else if (path.getJavaType().equals(LocalDate.class)) {
+                } else if (path.getJavaType().equals(LocalDate.class)) {
                     p = builder.between(
                             path.as((LocalDate.class)),
-                            (LocalDate) processValue(path,queryDtoPart,true),
-                            (LocalDate) processValue(path,queryDtoPart,false)
+                            (LocalDate) processValue(path, queryDtoPart, true),
+                            (LocalDate) processValue(path, queryDtoPart, false)
                     );
                 } else if (path.getJavaType().equals(LocalTime.class)) {
                     p = builder.between(
                             path.as((LocalTime.class)),
-                            (LocalTime) processValue(path,queryDtoPart,true),
-                            (LocalTime) processValue(path,queryDtoPart,false)
+                            (LocalTime) processValue(path, queryDtoPart, true),
+                            (LocalTime) processValue(path, queryDtoPart, false)
                     );
                 } else if (path.getJavaType().equals(String.class)) {
                     p = builder.between(
@@ -163,9 +183,9 @@ public class PredicateBuilderServiceImpl<T> implements IPredicateBuilder<T> {
                 if (path.getJavaType().equals(LocalDateTime.class)) {
                     p = builder.lessThanOrEqualTo(
                             path.as((LocalDateTime.class)),
-                            (LocalDateTime) processValue(path, queryDtoPart,true)
+                            (LocalDateTime) processValue(path, queryDtoPart, true)
                     );
-                }else if (path.getJavaType().equals(LocalDate.class)) {
+                } else if (path.getJavaType().equals(LocalDate.class)) {
                     p = builder.lessThanOrEqualTo(
                             path.as((LocalDate.class)),
                             (LocalDate) processValue(path, queryDtoPart, true)
@@ -173,7 +193,7 @@ public class PredicateBuilderServiceImpl<T> implements IPredicateBuilder<T> {
                 } else if (path.getJavaType().equals(LocalTime.class)) {
                     p = builder.lessThanOrEqualTo(
                             path.as((LocalTime.class)),
-                            (LocalTime) processValue(path, queryDtoPart,true)
+                            (LocalTime) processValue(path, queryDtoPart, true)
                     );
                 } else if (path.getJavaType().equals(String.class)) {
                     p = builder.lessThanOrEqualTo(
@@ -197,12 +217,12 @@ public class PredicateBuilderServiceImpl<T> implements IPredicateBuilder<T> {
                 if (path.getJavaType().equals(LocalDateTime.class)) {
                     p = builder.lessThan(
                             path.as((LocalDateTime.class)),
-                            (LocalDateTime) processValue(path, queryDtoPart,true)
+                            (LocalDateTime) processValue(path, queryDtoPart, true)
                     );
-                }else if (path.getJavaType().equals(LocalDate.class)) {
+                } else if (path.getJavaType().equals(LocalDate.class)) {
                     p = builder.lessThan(
                             path.as((LocalDate.class)),
-                            (LocalDate) processValue(path, queryDtoPart,true)
+                            (LocalDate) processValue(path, queryDtoPart, true)
                     );
                 } else if (path.getJavaType().equals(LocalTime.class)) {
                     p = builder.lessThan(
@@ -233,7 +253,7 @@ public class PredicateBuilderServiceImpl<T> implements IPredicateBuilder<T> {
                             path.as((LocalDateTime.class)),
                             (LocalDateTime) processValue(path, queryDtoPart, true)
                     );
-                }else if (path.getJavaType().equals(LocalDate.class)) {
+                } else if (path.getJavaType().equals(LocalDate.class)) {
                     p = builder.greaterThanOrEqualTo(
                             path.as((LocalDate.class)),
                             (LocalDate) processValue(path, queryDtoPart, true)
@@ -267,7 +287,7 @@ public class PredicateBuilderServiceImpl<T> implements IPredicateBuilder<T> {
                             path.as((LocalDateTime.class)),
                             (LocalDateTime) processValue(path, queryDtoPart, true)
                     );
-                }else if (path.getJavaType().equals(LocalDate.class)) {
+                } else if (path.getJavaType().equals(LocalDate.class)) {
                     p = builder.greaterThan(
                             path.as((LocalDate.class)),
                             (LocalDate) processValue(path, queryDtoPart, true)
@@ -275,7 +295,7 @@ public class PredicateBuilderServiceImpl<T> implements IPredicateBuilder<T> {
                 } else if (path.getJavaType().equals(LocalTime.class)) {
                     p = builder.greaterThan(
                             path.as((LocalTime.class)),
-                            (LocalTime) processValue(path, queryDtoPart,true)
+                            (LocalTime) processValue(path, queryDtoPart, true)
                     );
                 } else if (path.getJavaType().equals(String.class)) {
                     p = builder.greaterThan(
@@ -317,15 +337,15 @@ public class PredicateBuilderServiceImpl<T> implements IPredicateBuilder<T> {
             Boolean firstValue
     ) {
         String value = firstValue ? queryDtoPart.getValue() : queryDtoPart.getValue2();
-        if(property.getJavaType().equals(LocalDateTime.class)){
+        if (property.getJavaType().equals(LocalDateTime.class)) {
             DateTimeFormatter dtf = DateTimeFormatter.ofPattern(dateTimeFormat);
-            if(queryDtoPart.isMultipleValues())
+            if (queryDtoPart.isMultipleValues())
                 return Arrays.stream(value.split(queryDtoPart.getDelimiter()))
-                        .map(x -> LocalDateTime.parse(x,dtf)).collect(Collectors.toList());
+                        .map(x -> LocalDateTime.parse(x, dtf)).collect(Collectors.toList());
             else
-                return LocalDateTime.parse(value,dtf);
+                return LocalDateTime.parse(value, dtf);
 
-        }else if (property.getJavaType().equals(LocalDate.class)) {
+        } else if (property.getJavaType().equals(LocalDate.class)) {
             DateTimeFormatter dtf = DateTimeFormatter.ofPattern(dateFormat);
             if (queryDtoPart.isMultipleValues()) {
                 return Arrays.asList(value.split(queryDtoPart.getDelimiter()))
@@ -358,10 +378,10 @@ public class PredicateBuilderServiceImpl<T> implements IPredicateBuilder<T> {
         } else if (!property.getJavaType().equals(String.class)) {
             if (queryDtoPart.isMultipleValues()) {
                 return Arrays.stream(
-                                value.split(queryDtoPart.getDelimiter())
-                        ).map(
-                                x -> new BigDecimal(x)
-                        ).collect(Collectors.toList());
+                        value.split(queryDtoPart.getDelimiter())
+                ).map(
+                        x -> new BigDecimal(x)
+                ).collect(Collectors.toList());
             }
             return new BigDecimal(value);
         } else {

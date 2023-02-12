@@ -15,7 +15,10 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum QueryConstantsEnum {
+
+    CONDITION_IS_NULL("isNull"),
     CONDITION_EQUAL("eq"),
+    CONDITION_EQUAL_CONTAINS("eqc"),
     CONDITION_GREATER_EQUAL("geq"),
     CONDITION_GREATER("ge"),
     CONDITION_LESSER("le"),

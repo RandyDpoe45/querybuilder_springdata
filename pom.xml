@@ -13,7 +13,7 @@
     <!--Library Metadata -->
     <groupId>io.github.randydpoe45</groupId>
     <artifactId>dpoe-sd-query-builder</artifactId>
-    <version>1.0.3</version>
+    <version>1.0.7</version>
     <packaging>jar</packaging>
 
     <name>${project.groupId}:${project.artifactId}</name>
@@ -43,9 +43,9 @@
     </scm>
 
     <properties>
-        <java.verison>17</java.verison>
-        <maven.compiler.source>17</maven.compiler.source>
-        <maven.compiler.target>17</maven.compiler.target>
+        <java.verison>11</java.verison>
+        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.target>11</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <gpg.keyname>0x854EAFF5</gpg.keyname>
     </properties>
