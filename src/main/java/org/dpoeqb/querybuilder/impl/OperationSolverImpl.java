@@ -8,9 +8,9 @@ import org.springframework.data.jpa.domain.Specification;
 import org.dpoeqb.querybuilder.dtos.OperationResultDto;
 import org.dpoeqb.querybuilder.dtos.QueryConstantsEnum;
 
-import javax.persistence.EntityManager;
-import javax.persistence.TypedQuery;
-import javax.persistence.criteria.*;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.TypedQuery;
+import jakarta.persistence.criteria.*;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;

@@ -1,13 +1,13 @@
 package org.dpoeqb.querybuilder.impl;
 
 
+import jakarta.persistence.criteria.*;
 import org.dpoeqb.querybuilder.dtos.QueryConstantsEnum;
 import org.dpoeqb.querybuilder.dtos.QueryDto;
 import org.dpoeqb.querybuilder.dtos.QueryDtoPart;
 import org.dpoeqb.querybuilder.interfaces.IPredicateBuilder;
 import org.springframework.data.jpa.domain.Specification;
 
-import javax.persistence.criteria.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -122,7 +122,7 @@ public class PredicateBuilderServiceImpl<T> implements IPredicateBuilder<T> {
                     else
                         p = builder.like(
                                 path.as((String.class)),
-                                ""+processValue(path, queryDtoPart, true)
+                                "" + processValue(path, queryDtoPart, true)
                         );
                 } else {
                     if (queryDtoPart.isMultipleValues())
