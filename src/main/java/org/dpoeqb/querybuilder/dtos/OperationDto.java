@@ -11,10 +11,9 @@ import java.util.List;
 @Setter
 @Accessors(chain = true)
 public class OperationDto {
-    private String operation; //sum, avg, diff, prod, quout
-    private String attribute;
-    private BigDecimal auxValue = BigDecimal.ONE;
-    private String orderOperation = null;
-    private List<String> labelList;
-    private PaginationDto paginationDto;
+    private List<AggregationOperation> selectAttributes;
+    private QueryDto baseQuery;
+    private QueryDto aggregationQuery;
+    private Integer pageSize = null;
+    private Integer pageNumber = null;
 }

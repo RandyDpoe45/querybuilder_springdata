@@ -8,5 +8,5 @@ import java.util.List;
 
 public interface IOperationSolver{
 
-    List<OperationResultDto> solveQueryOperations(Specification<Class<?>> spec, List<OperationDto> operationDtoList);
+    <T> List<?> solveQueryOperations(Class<T> type, Specification<T> spec, OperationDto operationDtoList);
 }

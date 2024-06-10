@@ -10,7 +10,6 @@ import java.util.List;
 @Setter
 @Accessors(chain = true)
 public class QueryDto {
-
     private boolean distinct = false;
     private List<QueryDtoPart> queryDtoPartList;
 }

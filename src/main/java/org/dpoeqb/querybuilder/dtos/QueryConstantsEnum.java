@@ -28,6 +28,8 @@ public enum QueryConstantsEnum {
     DESC_SORT_DIRECTION("desc"),
     ASC_SORT_DIRECTION("asc"),
     OPERATION_COUNT("count"),
+    OPERATION_COUNT_DISC("countDisc"),
+    OPERATION_SELECT("select"),
     OPERATION_SUM("sum"),
     OPERATION_AVG("avg"),
     OPERATION_DIFF("diff"),

@@ -50,7 +50,6 @@ public class PredicateBuilderServiceImpl<T> implements IPredicateBuilder<T> {
                 specifications = Specification.where(createSpecification(part));
             }
         }
-
         return specifications;
     }
 
@@ -391,5 +390,4 @@ public class PredicateBuilderServiceImpl<T> implements IPredicateBuilder<T> {
             return value;
         }
     }
-
 }
