@@ -5,8 +5,8 @@
  */
 package org.dpoeqb.querybuilder.interfaces;
 
-import org.springframework.data.jpa.domain.Specification;
 import org.dpoeqb.querybuilder.dtos.QueryDto;
+import org.springframework.data.jpa.domain.Specification;
 
 /**
  *

@@ -5,8 +5,8 @@
  */
 package org.dpoeqb.querybuilder.interfaces;
 
-import org.springframework.data.domain.Pageable;
 import org.dpoeqb.querybuilder.dtos.PaginationDto;
+import org.springframework.data.domain.Pageable;
 
 /**
  *
